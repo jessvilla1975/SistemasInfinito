@@ -57,6 +57,12 @@ int: ganancia_existente = sum(i in 1..num_existentes)(
   calcular_segmento_const(empresarial, pos_x_existentes[i], pos_y_existentes[i])
 );
 
+% Calcular ganancia total después de agregar las nuevas localizaciones
+var int: ganancia_total = ganancia_existente + sum(i in 1..num_nuevos)(
+  calcular_segmento(poblacion, new_x[i], new_y[i]) + 
+  calcular_segmento(empresarial, new_x[i], new_y[i])
+);
+
 % Función objetivo: maximizar la suma de población y entorno empresarial
 solve maximize sum(i in 1..num_nuevos)(
   calcular_segmento(poblacion, new_x[i], new_y[i]) + 
@@ -66,6 +72,7 @@ solve maximize sum(i in 1..num_nuevos)(
 % Output
 output [
   "Ganancia total sin incluir las nuevas localizaciones: ", show(ganancia_existente), "\n",
+  "Ganancia total después de agregar las nuevas localizaciones: ", show(ganancia_total), "\n",
   "Nuevas ubicaciones:\n",
   show(new_x),
   "\n",

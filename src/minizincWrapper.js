@@ -59,18 +59,39 @@ class MinizincWrapper {
     }
 
     parseOutput(output) {
-        // Implementar el parsing de la salida de MiniZinc
-        // según el formato que definiste en el modelo
         try {
+            // Dividir la salida en líneas
             const lines = output.trim().split('\n');
+            
+            // Verificar que la salida contiene al menos 3 líneas
+            if (lines.length < 3) {
+                throw new Error("La salida no contiene las líneas esperadas.");
+            }
+    
+            // Extraer los valores de las líneas
+            const ganancia = lines[0].split(':')[1].trim();  // Ganancia total
+            const nuevasUbicacionesLabel = lines[1];         // 'Nuevas ubicaciones:'
+            const newX = lines[2].split(' ').map(Number);    // Convertir la línea a un arreglo de números
+            const newY = lines[3].split(' ').map(Number);    // Convertir la línea a un arreglo de números
+            
+            // Devolver un objeto con los resultados
             return {
-                newX: JSON.parse(lines[0]),
-                newY: JSON.parse(lines[1])
+                ganancia: parseFloat(ganancia),
+                nuevasUbicaciones: {
+                    x: newX,
+                    y: newY
+                }
             };
+            
         } catch (error) {
+            console.error("Error al parsear la salida:", error.message);
             throw new Error(`Error al parsear la salida: ${error.message}`);
         }
     }
+    
+    
+    
+    
 }
 
 module.exports = MinizincWrapper;
