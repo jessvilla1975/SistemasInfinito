@@ -17,9 +17,9 @@ array[1..num_nuevos] of var 0..n-1: new_y;
 
 % Función para calcular el segmento de población/empresarial de un punto
 function var int: calcular_segmento(array[1..n, 1..n] of int: matriz, var int: x, var int: y) =
-  sum([matriz[x_adj, y_adj] | 
-      x_adj in max(1, x-1)..min(n, x+1),
-      y_adj in max(1, y-1)..min(n, y+1)]);
+  sum([matriz[x_adj, y_adj] |
+       x_adj in max(1, x-1)..min(n, x+1),
+       y_adj in max(1, y-1)..min(n, y+1)]);
 
 % Restricciones
 % 1. No pueden ser contiguos a los existentes
@@ -48,9 +48,9 @@ constraint forall(i in 1..num_nuevos)(
 
 % Calcular ganancia total de las localizaciones existentes
 function int: calcular_segmento_const(array[1..n, 1..n] of int: matriz, int: x, int: y) =
-  sum([matriz[x_adj, y_adj] | 
-      x_adj in max(1, x-1)..min(n, x+1),
-      y_adj in max(1, y-1)..min(n, y+1)]);
+  sum([matriz[x_adj, y_adj] |
+       x_adj in max(1, x-1)..min(n, x+1),
+       y_adj in max(1, y-1)..min(n, y+1)]);
 
 int: ganancia_existente = sum(i in 1..num_existentes)(
   calcular_segmento_const(poblacion, pos_x_existentes[i], pos_y_existentes[i]) +
@@ -69,12 +69,18 @@ solve maximize sum(i in 1..num_nuevos)(
   calcular_segmento(empresarial, new_x[i], new_y[i])
 );
 
-% Output
+% Output corregido
 output [
   "Ganancia total sin incluir las nuevas localizaciones: ", show(ganancia_existente), "\n",
-  "Ganancia total después de agregar las nuevas localizaciones: ", show(ganancia_total), "\n",
+  "Ganancia total después de agregar las nuevas localizaciones: ", show(ganancia_total), "\n\n",
   "Nuevas ubicaciones:\n",
-  show(new_x),
-  "\n",
-  show(new_y)
+  "Coordenadas X: ", show(new_x), "\n",
+  "Coordenadas Y: ", show(new_y), "\n\n",
+  "Coordenadas de todas las localizaciones:\n",
+  "Existentes:\n",
+  "X: ", show(pos_x_existentes), "\n",
+  "Y: ", show(pos_y_existentes), "\n\n",
+  "Nuevas:\n",
+  "X: ", show(new_x), "\n",
+  "Y: ", show(new_y)
 ];
