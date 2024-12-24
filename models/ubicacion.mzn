@@ -46,6 +46,17 @@ constraint forall(i in 1..num_nuevos)(
   calcular_segmento(empresarial, new_x[i], new_y[i]) >= 20
 );
 
+% Calcular ganancia total de las localizaciones existentes
+function int: calcular_segmento_const(array[1..n, 1..n] of int: matriz, int: x, int: y) =
+  sum([matriz[x_adj, y_adj] | 
+      x_adj in max(1, x-1)..min(n, x+1),
+      y_adj in max(1, y-1)..min(n, y+1)]);
+
+int: ganancia_existente = sum(i in 1..num_existentes)(
+  calcular_segmento_const(poblacion, pos_x_existentes[i], pos_y_existentes[i]) +
+  calcular_segmento_const(empresarial, pos_x_existentes[i], pos_y_existentes[i])
+);
+
 % Función objetivo: maximizar la suma de población y entorno empresarial
 solve maximize sum(i in 1..num_nuevos)(
   calcular_segmento(poblacion, new_x[i], new_y[i]) + 
@@ -54,6 +65,7 @@ solve maximize sum(i in 1..num_nuevos)(
 
 % Output
 output [
+  "Ganancia total sin incluir las nuevas localizaciones: ", show(ganancia_existente), "\n",
   "Nuevas ubicaciones:\n",
   show(new_x),
   "\n",
