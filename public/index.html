@@ -1,23 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Ubicación de Programas</title>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+            --border-radius: 8px;
+        }
+
         body { 
-            font-family: Arial, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 800px; 
             margin: 0 auto; 
             padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
+
+        h1, h2 {
+            color: var(--secondary-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
         .container { 
-            border: 1px solid #ccc; 
-            padding: 20px; 
-            margin: 20px 0;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px; 
+            margin: 30px 0;
         }
+
         .result { 
             white-space: pre-wrap; 
-            background: #f5f5f5; 
+            background: #f7f9fa; 
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+        }
+
+        input[type="file"], select, button {
+            display: block;
+            width: 100%;
             padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1em;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #saveButton {
+            background-color: #27ae60;
+        }
+
+        #saveButton:hover {
+            background-color: #2ecc71;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
         }
     </style>
 </head>

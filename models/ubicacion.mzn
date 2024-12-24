@@ -71,16 +71,12 @@ solve maximize sum(i in 1..num_nuevos)(
 
 % Output corregido
 output [
-  "Ganancia total sin incluir las nuevas localizaciones: ", show(ganancia_existente), "\n",
-  "Ganancia total después de agregar las nuevas localizaciones: ", show(ganancia_total), "\n\n",
-  "Nuevas ubicaciones:\n",
-  "Coordenadas X: ", show(new_x), "\n",
-  "Coordenadas Y: ", show(new_y), "\n\n",
-  "Coordenadas de todas las localizaciones:\n",
-  "Existentes:\n",
-  "X: ", show(pos_x_existentes), "\n",
-  "Y: ", show(pos_y_existentes), "\n\n",
-  "Nuevas:\n",
-  "X: ", show(new_x), "\n",
-  "Y: ", show(new_y)
+  "{\n",
+  "  \"ganancia_existente\": ", show(ganancia_existente), ",\n",
+  "  \"gananciaTotal\": ", show(ganancia_total), ",\n",
+  "  \"new_x\": ", show(new_x), ",\n",
+  "  \"new_y\": ", show(new_y), ",\n",
+  "  \"pos_x_existentes\": ", show(pos_x_existentes), ",\n",
+  "  \"pos_y_existentes\": ", show(pos_y_existentes), "\n",
+  "}"
 ];

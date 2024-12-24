@@ -18,20 +18,37 @@ class MinizincWrapper {
 
     async solve(modelPath, data) {
         const tempDataPath = path.join(__dirname, '../temp', `data_${Date.now()}.dzn`);
+        const tempOutputPath = path.join(__dirname, '../temp', `output_${Date.now()}.txt`);
         const dznContent = this.convertToDzn(data);
 
         try {
+            const tempDir = path.join(__dirname, '../temp');
+            await fs.mkdir(tempDir, { recursive: true });
             await fs.writeFile(tempDataPath, dznContent);
 
             return new Promise((resolve, reject) => {
-                exec(`minizinc ${modelPath} ${tempDataPath}`, (error, stdout, stderr) => {
+                exec(`minizinc --output-mode json ${modelPath} ${tempDataPath}`, async (error, stdout, stderr) => {
+                    console.log("Raw MiniZinc output:", stdout); 
                     fs.unlink(tempDataPath).catch(console.error);
 
                     if (error) {
-                        reject(new Error(stderr));
+                        reject(new Error(`Error al ejecutar MiniZinc: ${stderr || error.message}`));
                         return;
                     }
-                    resolve(this.parseOutput(stdout));
+
+                    try {
+                        console.log("Salida de MiniZinc:", stdout);
+
+                        const jsonOutput = this.extractJson(stdout);
+                        await fs.writeFile(tempOutputPath, jsonOutput);
+
+                        const result = this.parseOutput(jsonOutput);
+                        resolve(result);
+                    } catch (parseError) {
+                        reject(new Error(`Error al analizar la salida de MiniZinc: ${parseError.message}`));
+                    } finally {
+                        fs.unlink(tempOutputPath).catch(console.error);
+                    }
                 });
             });
         } catch (error) {
@@ -39,7 +56,39 @@ class MinizincWrapper {
         }
     }
 
+    parseOutput(output) {
+        try {
+            console.log("Raw output:", output);
+            const result = JSON.parse(output);
+            console.log("Parsed result:", result);
+            
+            // Crear un objeto con valores por defecto en caso de que falten datos
+            return {
+                gananciaExistente: result.ganancia_existente || 0,
+                gananciaTotal: result.gananciaTotal || 0,
+                nuevasUbicaciones: {
+                    x: result.new_x || [],
+                    y: result.new_y || []
+                },
+                ubicacionesExistentes: {
+                    x: result.pos_x_existentes || [],
+                    y: result.pos_y_existentes || []
+                }
+            };
+        } catch (error) {
+            console.error("Error parsing output:", error);
+            console.log("Problematic output:", output);
+            throw new Error("Error al analizar el JSON de salida: " + error.message);
+        }
+    }
+
     convertToDzn(data) {
+        if (!Array.isArray(data.posXExistentes) || !Array.isArray(data.posYExistentes)) {
+            throw new Error("Las coordenadas de ubicaciones existentes no son válidas.");
+        }
+        if (!Array.isArray(data.poblacion) || !Array.isArray(data.empresarial)) {
+            throw new Error("Los datos de población o empresariales no son válidos.");
+        }
         return `
             n = ${data.n};
             num_existentes = ${data.numExistentes};
@@ -51,30 +100,14 @@ class MinizincWrapper {
         `;
     }
 
-    parseOutput(output) {
-        try {
-            const lines = output.trim().split('\n');
-            if (lines.length < 3) {
-                throw new Error("La salida no contiene las líneas esperadas.");
-            }
-
-            const ganancia = lines[0].split(':')[1].trim();
-            const newX = lines[2].split(' ').map(Number);
-            const newY = lines[3].split(' ').map(Number);
-
-            return {
-                ganancia: parseFloat(ganancia),
-                nuevasUbicaciones: {
-                    x: newX,
-                    y: newY
-                }
-            };
-
-        } catch (error) {
-            console.error("Error al parsear la salida:", error.message);
-            throw new Error(`Error al parsear la salida: ${error.message}`);
+    extractJson(output) {
+        const jsonMatch = output.match(/{[\s\S]*}/);
+        if (!jsonMatch) {
+            throw new Error("No se pudo encontrar un JSON válido en la salida.");
         }
+        return jsonMatch[0];
     }
+
 }
 
 module.exports = MinizincWrapper;
