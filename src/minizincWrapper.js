@@ -64,16 +64,16 @@ class MinizincWrapper {
             
             // Crear un objeto con valores por defecto en caso de que falten datos
             return {
-                gananciaExistente: result.ganancia_existente || 0,
-                gananciaTotal: result.gananciaTotal || 0,
+               
                 nuevasUbicaciones: {
                     x: result.new_x || [],
                     y: result.new_y || []
                 },
-                ubicacionesExistentes: {
-                    x: result.pos_x_existentes || [],
-                    y: result.pos_y_existentes || []
-                }
+                gananciaOriginal: result.ganancia_existente || 0,
+                gananciaTotal: result.ganancia_total || 0
+                
+
+                
             };
         } catch (error) {
             console.error("Error parsing output:", error);
@@ -81,6 +81,7 @@ class MinizincWrapper {
             throw new Error("Error al analizar el JSON de salida: " + error.message);
         }
     }
+    
 
     convertToDzn(data) {
         if (!Array.isArray(data.posXExistentes) || !Array.isArray(data.posYExistentes)) {

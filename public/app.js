@@ -5,39 +5,17 @@ function mostrarResultado(result) {
     
     // Asegurarse de que todas las propiedades necesarias existan
     const safeResult = {
-        gananciaExistente: result.gananciaExistente || 0,
-        gananciaTotal: result.gananciaTotal || 0,
+   
         nuevasUbicaciones: {
             x: result.nuevasUbicaciones?.x || [],
             y: result.nuevasUbicaciones?.y || []
         },
-        ubicacionesExistentes: {
-            x: result.ubicacionesExistentes?.x || [],
-            y: result.ubicacionesExistentes?.y || []
-        }
+        gananciaOriginal: result.gananciaOriginal || 0,
+        gananciaTotal: result.gananciaTotal || 0
+        
     };
     
     const html = `
-
-        ${safeResult.nuevasUbicaciones.x.length > 0 ? `
-            <div class="locations-section">
-                <h3>Nuevas Ubicaciones Encontradas</h3>
-                <table class="locations-table">
-                    <tr>
-                        <th>Posición</th>
-                        <th>Coordenada X</th>
-                        <th>Coordenada Y</th>
-                    </tr>
-                    ${safeResult.nuevasUbicaciones.x.map((x, i) => `
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td>${x}</td>
-                            <td>${safeResult.nuevasUbicaciones.y[i]}</td>
-                        </tr>
-                    `).join('')}
-                </table>
-            </div>
-        ` : ''}
         <div class="result-container">
             <div class="metrics-section">
                 <h3>Métricas de Ganancia</h3>
@@ -48,29 +26,31 @@ function mostrarResultado(result) {
                     </tr>
                     <tr>
                         <td>Ganancia Existente</td>
-                        <td>${safeResult.gananciaExistente}</td>
+                        <td>${safeResult.gananciaOriginal}</td>
                     </tr>
                     <tr>
                         <td>Ganancia Total</td>
                         <td>${safeResult.gananciaTotal}</td>
                     </tr>
+
+                    
                 </table>
             </div>
 
-            ${safeResult.ubicacionesExistentes.x.length > 0 ? `
+            ${safeResult.nuevasUbicaciones.x.length > 0 ? `
                 <div class="locations-section">
-                    <h3>Ubicaciones Existentes</h3>
+                    <h3>Nuevas Ubicaciones Encontradas</h3>
                     <table class="locations-table">
                         <tr>
                             <th>Posición</th>
                             <th>Coordenada X</th>
                             <th>Coordenada Y</th>
                         </tr>
-                        ${safeResult.ubicacionesExistentes.x.map((x, i) => `
+                        ${safeResult.nuevasUbicaciones.x.map((x, i) => `
                             <tr>
                                 <td>${i + 1}</td>
                                 <td>${x}</td>
-                                <td>${safeResult.ubicacionesExistentes.y[i]}</td>
+                                <td>${safeResult.nuevasUbicaciones.y[i]}</td>
                             </tr>
                         `).join('')}
                     </table>
@@ -83,6 +63,8 @@ function mostrarResultado(result) {
 
     resultDiv.innerHTML = html;
 }
+
+
 async function resolverProblema() {
     const fileInput = document.getElementById('inputFile');
     const resultDiv = document.getElementById('result');

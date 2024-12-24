@@ -2,6 +2,9 @@
 int: n;  % Tamaño de la matriz
 int: num_existentes;  % Número de localizaciones existentes
 int: num_nuevos;  % Número de nuevas localizaciones a ubicar
+var int: ganancia_total; 
+var int: ganancia_existente; 
+
 
 % Arrays para las posiciones existentes
 array[1..num_existentes] of int: pos_x_existentes;
@@ -52,13 +55,13 @@ function int: calcular_segmento_const(array[1..n, 1..n] of int: matriz, int: x, 
        x_adj in max(1, x-1)..min(n, x+1),
        y_adj in max(1, y-1)..min(n, y+1)]);
 
-int: ganancia_existente = sum(i in 1..num_existentes)(
+  ganancia_existente = sum(i in 1..num_existentes)(
   calcular_segmento_const(poblacion, pos_x_existentes[i], pos_y_existentes[i]) +
   calcular_segmento_const(empresarial, pos_x_existentes[i], pos_y_existentes[i])
 );
 
 % Calcular ganancia total después de agregar las nuevas localizaciones
-var int: ganancia_total = ganancia_existente + sum(i in 1..num_nuevos)(
+  ganancia_total = ganancia_existente + sum(i in 1..num_nuevos)(
   calcular_segmento(poblacion, new_x[i], new_y[i]) + 
   calcular_segmento(empresarial, new_x[i], new_y[i])
 );
@@ -72,11 +75,15 @@ solve maximize sum(i in 1..num_nuevos)(
 % Output corregido
 output [
   "{\n",
-  "  \"ganancia_existente\": ", show(ganancia_existente), ",\n",
+  "  \"gananciaExistente\": ", show(ganancia_existente), ",\n",
   "  \"gananciaTotal\": ", show(ganancia_total), ",\n",
-  "  \"new_x\": ", show(new_x), ",\n",
-  "  \"new_y\": ", show(new_y), ",\n",
-  "  \"pos_x_existentes\": ", show(pos_x_existentes), ",\n",
-  "  \"pos_y_existentes\": ", show(pos_y_existentes), "\n",
+  "  \"nuevasUbicaciones\": {\n",
+  "    \"x\": ", show(new_x), ",\n",
+  "    \"y\": ", show(new_y), "\n",
+  "  },\n",
+  "  \"ubicacionesExistentes\": {\n",
+  "    \"x\": ", show(pos_x_existentes), ",\n",
+  "    \"y\": ", show(pos_y_existentes), "\n",
+  "  }\n",
   "}"
 ];
