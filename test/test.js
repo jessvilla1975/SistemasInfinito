@@ -1,10 +1,11 @@
-const { input, poblacion, empresarial } = require('./data.js');
+const data1 = require('./data.js');
+const data2 = require('./data2.js');
 
 // Función para calcular el segmento
 function calcularSegmento(matriz, x, y, n) {
     let suma = 0;
-    for(let i = Math.max(0, x-1); i <= Math.min(n-1, x+1); i++) {
-        for(let j = Math.max(0, y-1); j <= Math.min(n-1, y+1); j++) {
+    for (let i = Math.max(0, x - 1); i <= Math.min(n - 1, x + 1); i++) {
+        for (let j = Math.max(0, y - 1); j <= Math.min(n - 1, y + 1); j++) {
             suma += matriz[i][j];
         }
     }
@@ -12,11 +13,11 @@ function calcularSegmento(matriz, x, y, n) {
 }
 
 // Función para calcular la ganancia existente
-function calcularGananciaExistente() {
+function calcularGananciaExistente(input, poblacion, empresarial) {
     let ganancia = 0;
-    for(let i = 0; i < input.num_existentes; i++) {
-        const x = input.pos_x_existentes[i];
-        const y = input.pos_y_existentes[i];
+    for (let i = 0; i < input.num_existentes; i++) {
+        const x = input.pos_x_existentes[i] - 1; // Ajustar índice basado en 1 a basado en 0
+        const y = input.pos_y_existentes[i] - 1;
         ganancia += calcularSegmento(poblacion, x, y, input.n);
         ganancia += calcularSegmento(empresarial, x, y, input.n);
     }
@@ -24,11 +25,11 @@ function calcularGananciaExistente() {
 }
 
 // Función para calcular la ganancia total
-function calcularGananciaTotal() {
-    let ganancia = calcularGananciaExistente();
-    for(let i = 0; i < input.num_nuevos; i++) {
-        const x = input.new_x[i];
-        const y = input.new_y[i];
+function calcularGananciaTotal(input, poblacion, empresarial) {
+    let ganancia = calcularGananciaExistente(input, poblacion, empresarial);
+    for (let i = 0; i < input.num_nuevos; i++) {
+        const x = input.new_x[i] - 1; // Ajustar índice basado en 1 a basado en 0
+        const y = input.new_y[i] - 1;
         ganancia += calcularSegmento(poblacion, x, y, input.n);
         ganancia += calcularSegmento(empresarial, x, y, input.n);
     }
@@ -36,16 +37,17 @@ function calcularGananciaTotal() {
 }
 
 // Test suite
-function runTests() {
-    console.log('Iniciando pruebas de verificación...\n');
+function runTests(data, testName) {
+    console.log(`\n=== Iniciando ${testName} ===\n`);
+    const { input, poblacion, empresarial } = data;
 
     // Test 1: Verificar no contigüidad entre existentes y nuevas
     let passTest1 = true;
     console.log('[ ] Test 1: Verificando no contigüidad entre ubicaciones existentes y nuevas...');
-    for(let i = 0; i < input.num_nuevos; i++) {
-        for(let j = 0; j < input.num_existentes; j++) {
-            if(Math.abs(input.new_x[i] - input.pos_x_existentes[j]) <= 1 && 
-               Math.abs(input.new_y[i] - input.pos_y_existentes[j]) <= 1) {
+    for (let i = 0; i < input.num_nuevos; i++) {
+        for (let j = 0; j < input.num_existentes; j++) {
+            if (Math.abs(input.new_x[i] - input.pos_x_existentes[j]) <= 1 &&
+                Math.abs(input.new_y[i] - input.pos_y_existentes[j]) <= 1) {
                 passTest1 = false;
                 console.log(`    ❌ Error: Ubicación nueva (${input.new_x[i]},${input.new_y[i]}) es contigua a existente (${input.pos_x_existentes[j]},${input.pos_y_existentes[j]})`);
             }
@@ -55,7 +57,7 @@ function runTests() {
 
     // Test 2: Verificar ganancia existente
     console.log('\n[ ] Test 2: Verificando ganancia de localizaciones existentes...');
-    const gananciaExistente = calcularGananciaExistente();
+    const gananciaExistente = calcularGananciaExistente(input, poblacion, empresarial);
     const passTest2 = gananciaExistente === input.ganancia_existente_esperada;
     console.log(`    Ganancia existente calculada: ${gananciaExistente}`);
     console.log(`    Ganancia existente esperada: ${input.ganancia_existente_esperada}`);
@@ -63,7 +65,7 @@ function runTests() {
 
     // Test 3: Verificar ganancia total
     console.log('\n[ ] Test 3: Verificando ganancia total...');
-    const gananciaTotal = calcularGananciaTotal();
+    const gananciaTotal = calcularGananciaTotal(input, poblacion, empresarial);
     const passTest3 = gananciaTotal === input.ganancia_total_esperada;
     console.log(`    Ganancia total calculada: ${gananciaTotal}`);
     console.log(`    Ganancia total esperada: ${input.ganancia_total_esperada}`);
@@ -77,5 +79,6 @@ function runTests() {
     console.log(`Pruebas fallidas: ${resultados.filter(x => !x).length}`);
 }
 
-// Ejecutar las pruebas
-runTests();
+// Ejecutar pruebas para ambos datasets
+runTests(data1, 'Prueba 1 (data.js)');
+runTests(data2, 'Prueba 2 (data2.js)');

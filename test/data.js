@@ -9,8 +9,8 @@ module.exports = {
         // Resultados esperados
         new_x: [13, 14, 12, 11],
         new_y: [7, 9, 9, 7],
-        ganancia_existente_esperada: 388,
-        ganancia_total_esperada: 1498
+        ganancia_existente_esperada: 328,
+        ganancia_total_esperada: 1833
     },
     
     poblacion: [

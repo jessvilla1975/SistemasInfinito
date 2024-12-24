@@ -10,6 +10,10 @@ function mostrarResultado(result) {
             x: result.nuevasUbicaciones?.x || [],
             y: result.nuevasUbicaciones?.y || []
         },
+        ubicacionesExistentes: {
+            x: result.ubicacionesExistentes?.x || [],
+            y: result.ubicacionesExistentes?.y || []
+        },
         gananciaOriginal: result.gananciaOriginal || 0,
         gananciaTotal: result.gananciaTotal || 0
         
@@ -32,11 +36,27 @@ function mostrarResultado(result) {
                         <td>Ganancia Total</td>
                         <td>${safeResult.gananciaTotal}</td>
                     </tr>
-
-                    
                 </table>
             </div>
-
+            ${safeResult.ubicacionesExistentes.x.length > 0 ? `
+                <div class="locations-section">
+                    <h3>Ubicaciones Existentes</h3>
+                    <table class="locations-table">
+                        <tr>
+                            <th>Posición</th>
+                            <th>Coordenada X</th>
+                            <th>Coordenada Y</th>
+                        </tr>
+                        ${safeResult.ubicacionesExistentes.x.map((x, i) => `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${x}</td>
+                                <td>${safeResult.ubicacionesExistentes2.y[i]}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            ` : ''}
             ${safeResult.nuevasUbicaciones.x.length > 0 ? `
                 <div class="locations-section">
                     <h3>Nuevas Ubicaciones Encontradas</h3>
@@ -57,7 +77,6 @@ function mostrarResultado(result) {
                 </div>
             ` : ''}
 
-            
         </div>
     `;
 

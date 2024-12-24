@@ -42,7 +42,7 @@ class MinizincWrapper {
                         const jsonOutput = this.extractJson(stdout);
                         await fs.writeFile(tempOutputPath, jsonOutput);
 
-                        const result = this.parseOutput(jsonOutput);
+                        const result = this.parseOutput(jsonOutput, data);
                         resolve(result);
                     } catch (parseError) {
                         reject(new Error(`Error al analizar la salida de MiniZinc: ${parseError.message}`));
@@ -56,7 +56,8 @@ class MinizincWrapper {
         }
     }
 
-    parseOutput(output) {
+    parseOutput(output, data ) {
+        const dznContent = this.convertToDzn(data);
         try {
             console.log("Raw output:", output);
             const result = JSON.parse(output);
@@ -64,16 +65,18 @@ class MinizincWrapper {
             
             // Crear un objeto con valores por defecto en caso de que falten datos
             return {
-               
                 nuevasUbicaciones: {
                     x: result.new_x || [],
                     y: result.new_y || []
                 },
+                ubicacionesExistentes: {
+                    x: result.pos_x_existentes|| [],
+                    y: result.pos_y_existentes || []
+                },
+                
                 gananciaOriginal: result.ganancia_existente || 0,
-                gananciaTotal: result.ganancia_total || 0
-                
-
-                
+                gananciaTotal: result.ganancia_total || 0,
+          
             };
         } catch (error) {
             console.error("Error parsing output:", error);
