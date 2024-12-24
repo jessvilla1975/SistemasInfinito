@@ -16,7 +16,7 @@ array[1..num_nuevos] of var 0..n-1: new_x;
 array[1..num_nuevos] of var 0..n-1: new_y;
 
 % Función para calcular el segmento de población/empresarial de un punto
-function int: calcular_segmento(array[1..n, 1..n] of int: matriz, int: x, int: y) =
+function var int: calcular_segmento(array[1..n, 1..n] of int: matriz, var int: x, var int: y) =
   sum([matriz[x_adj, y_adj] | 
       x_adj in max(1, x-1)..min(n, x+1),
       y_adj in max(1, y-1)..min(n, y+1)]);
@@ -38,18 +38,18 @@ constraint forall(i, j in 1..num_nuevos where i < j)(
 
 % 3. Segmento de población mínimo de 25
 constraint forall(i in 1..num_nuevos)(
-  calcular_segmento(poblacion, new_x[i]+1, new_y[i]+1) >= 25
+  calcular_segmento(poblacion, new_x[i], new_y[i]) >= 25
 );
 
 % 4. Entorno empresarial mínimo de 20
 constraint forall(i in 1..num_nuevos)(
-  calcular_segmento(empresarial, new_x[i]+1, new_y[i]+1) >= 20
+  calcular_segmento(empresarial, new_x[i], new_y[i]) >= 20
 );
 
 % Función objetivo: maximizar la suma de población y entorno empresarial
 solve maximize sum(i in 1..num_nuevos)(
-  calcular_segmento(poblacion, new_x[i]+1, new_y[i]+1) + 
-  calcular_segmento(empresarial, new_x[i]+1, new_y[i]+1)
+  calcular_segmento(poblacion, new_x[i], new_y[i]) + 
+  calcular_segmento(empresarial, new_x[i], new_y[i])
 );
 
 % Output
