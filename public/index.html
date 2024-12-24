@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema de Ubicación de Programas</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        .container { 
+            border: 1px solid #ccc; 
+            padding: 20px; 
+            margin: 20px 0;
+        }
+        .result { 
+            white-space: pre-wrap; 
+            background: #f5f5f5; 
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sistema de Ubicación de Programas</h1>
+    
+    <div class="container">
+        <h2>Entrada de datos</h2>
+        <input type="file" id="inputFile" accept=".txt">
+        
+        <h2>Selección de Solver</h2>
+        <select id="solver">
+            <option value="gecode">Gecode</option>
+            <option value="chuffed">Chuffed</option>
+            <option value="coin-bc">COIN-BC</option>
+        </select>
+        
+        <button onclick="resolverProblema()">Resolver</button>
+    </div>
+    
+    <div class="container">
+        <h2>Resultados</h2>
+        <div id="result" class="result"></div>
+        <button id="saveButton" style="display: none;" onclick="guardarSolucion()">
+            Guardar Solución
+        </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/minizinc/2.6.0/minizinc.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
