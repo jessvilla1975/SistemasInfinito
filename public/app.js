@@ -1,11 +1,23 @@
+/*
+Integrantes:
+Alejandro Marin Hoyos - 2259353-3743
+Yessica Fernanda Villa Nuñez - 2266301-3743
+Manuel Antonio Vidales Duran - 2155481-3743
+*/
+
+// Variable global para almacenar la solución actual
 let currentSolution = null;
 
+/**
+ * Muestra el resultado procesado en la interfaz web
+ * Crea tablas con métricas y ubicaciones
+ * @param {Object} result - Objeto con los resultados a mostrar
+ */
 function mostrarResultado(result) {
     const resultDiv = document.getElementById('result');
     
     // Asegurarse de que todas las propiedades necesarias existan
     const safeResult = {
-   
         nuevasUbicaciones: {
             x: result.nuevasUbicaciones?.x || [],
             y: result.nuevasUbicaciones?.y || []
@@ -16,7 +28,6 @@ function mostrarResultado(result) {
         },
         gananciaOriginal: result.gananciaOriginal || 0,
         gananciaTotal: result.gananciaTotal || 0
-        
     };
     
     const html = `
@@ -76,14 +87,16 @@ function mostrarResultado(result) {
                     </table>
                 </div>
             ` : ''}
-
         </div>
     `;
 
     resultDiv.innerHTML = html;
 }
 
-
+/**
+ * Función principal que maneja el proceso de resolución
+ * Lee archivo, procesa datos y muestra resultados
+ */
 async function resolverProblema() {
     const fileInput = document.getElementById('inputFile');
     const resultDiv = document.getElementById('result');
@@ -123,7 +136,7 @@ async function resolverProblema() {
     }
 }
 
-// Estilos CSS para agregar
+// Estilos CSS para la presentación visual
 const styles = `
 .result-container {
     padding: 20px;
@@ -183,6 +196,10 @@ h3 {
 }
 `;
 
+/**
+ * Guarda la solución en formato JSON
+ * @param {Object} result - Resultado a guardar
+ */
 function guardarSolucion(result) {
     const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -195,7 +212,11 @@ function guardarSolucion(result) {
     URL.revokeObjectURL(url);
 }
 
-
+/**
+ * Analiza y procesa el archivo de entrada
+ * @param {string} content - Contenido del archivo
+ * @returns {Object} Datos estructurados
+ */
 function parseInputFile(content) {
     const lines = content.split('\n').filter(line => line.trim() !== ''); // Filtrar líneas vacías
     let currentLine = 0;
@@ -248,6 +269,12 @@ function parseInputFile(content) {
     }
 }
 
+/**
+ * Procesa la solución y calcula ganancias
+ * @param {Object} solution - Solución a procesar
+ * @param {Object} data - Datos originales
+ * @returns {Object} Solución procesada con ganancias
+ */
 function processSolution(solution, data) {
     const newX = solution.new_x;
     const newY = solution.new_y;
@@ -273,12 +300,20 @@ function processSolution(solution, data) {
     };
 }
 
+/**
+ * Formatea la solución para guardado en archivo
+ * @param {Object} solution - Solución a formatear
+ * @returns {string} Texto formateado
+ */
 function formatSolution(solution) {
     return `${solution.gananciaOriginal}\n${solution.gananciaTotal}\n` +
            solution.ubicacionesExistentes.map(([x, y]) => `${x} ${y}`).join('\n') + '\n' +
            solution.nuevasUbicaciones.map(([x, y]) => `${x} ${y}`).join('\n');
 }
 
+/**
+ * Guarda la solución actual en formato texto
+ */
 function guardarSolucion() {
     if (!currentSolution) return;
 
@@ -293,6 +328,14 @@ function guardarSolucion() {
     URL.revokeObjectURL(url);
 }
 
+/**
+ * Calcula la ganancia para una ubicación específica
+ * @param {number} x - Coordenada X
+ * @param {number} y - Coordenada Y
+ * @param {Array} poblacion - Matriz de datos poblacionales
+ * @param {Array} empresarial - Matriz de datos empresariales
+ * @returns {number} Ganancia calculada
+ */
 function calculateGain(x, y, poblacion, empresarial) {
     let gain = 0;
     for (let i = Math.max(0, x - 1); i <= Math.min(poblacion.length - 1, x + 1); i++) {
@@ -302,4 +345,3 @@ function calculateGain(x, y, poblacion, empresarial) {
     }
     return gain;
 }
-
