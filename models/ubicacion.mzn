@@ -1,3 +1,8 @@
+% Integrantes:
+% Alejandro Marin Hoyos - 2259353-3743
+% Yessica Fernanda Villa Nuñez - 2266301-3743
+% Manuel Antonio Vidales Duran - 2155481-3743
+
 % Parámetros de entrada
 int: n;  % Tamaño de la matriz
 int: num_existentes;  % Número de localizaciones existentes
