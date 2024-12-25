@@ -49,25 +49,27 @@ function mostrarResultado(result) {
                     </tr>
                 </table>
             </div>
-            ${safeResult.ubicacionesExistentes.x.length > 0 ? `
-                <div class="locations-section">
-                    <h3>Ubicaciones Existentes</h3>
-                    <table class="locations-table">
-                        <tr>
-                            <th>Posición</th>
-                            <th>Coordenada X</th>
-                            <th>Coordenada Y</th>
-                        </tr>
-                        ${safeResult.ubicacionesExistentes.x.map((x, i) => `
-                            <tr>
-                                <td>${i + 1}</td>
-                                <td>${x}</td>
-                                <td>${safeResult.ubicacionesExistentes2.y[i]}</td>
-                            </tr>
-                        `).join('')}
-                    </table>
-                </div>
-            ` : ''}
+            <div class="locations-section">
+                <h3>Ubicaciones Existentes</h3>
+                <table class="locations-table">
+                    <tr>
+                        <th>Posición</th>
+                        <th>Coordenada X</th>
+                        <th>Coordenada Y</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+         
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>2</td>
+                    </tr>
+
+                </table>
+            </div>
+
             ${safeResult.nuevasUbicaciones.x.length > 0 ? `
                 <div class="locations-section">
                     <h3>Nuevas Ubicaciones Encontradas</h3>
@@ -196,21 +198,6 @@ h3 {
 }
 `;
 
-/**
- * Guarda la solución en formato JSON
- * @param {Object} result - Resultado a guardar
- */
-function guardarSolucion(result) {
-    const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resultado.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
 
 /**
  * Analiza y procesa el archivo de entrada

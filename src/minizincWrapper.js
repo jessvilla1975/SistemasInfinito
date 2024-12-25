@@ -65,7 +65,7 @@ class MinizincWrapper {
                         const jsonOutput = this.extractJson(stdout); // Extrae el JSON de la salida.
                         await fs.writeFile(tempOutputPath, jsonOutput); // Escribe la salida JSON en un archivo temporal.
 
-                        const result = this.parseOutput(jsonOutput, data); // Analiza la salida.
+                        const result = this.parseOutput(jsonOutput); // Analiza la salida.
                         resolve(result); // Retorna el resultado.
                     } catch (parseError) {
                         reject(new Error(`Error al analizar la salida de MiniZinc: ${parseError.message}`));
@@ -86,7 +86,7 @@ class MinizincWrapper {
      * @param {Object} data - Datos de entrada proporcionados.
      * @returns {Object} - Resultado procesado con valores por defecto.
      */
-    parseOutput(output, data) {
+    parseOutput(output) {
         try {
             console.log("Raw output:", output);
             const result = JSON.parse(output); // Convierte el JSON en un objeto de JavaScript.

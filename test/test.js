@@ -1,6 +1,6 @@
 const data1 = require('./data.js');
 const data2 = require('./data2.js');
-
+const data3 = require('./data3.js');
 // Función para calcular el segmento
 function calcularSegmento(matriz, x, y, n) {
     let suma = 0;
@@ -82,3 +82,4 @@ function runTests(data, testName) {
 // Ejecutar pruebas para ambos datasets
 runTests(data1, 'Prueba 1 (data.js)');
 runTests(data2, 'Prueba 2 (data2.js)');
+runTests(data3, 'Prueba 3 (data3.js)');
