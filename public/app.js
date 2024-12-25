@@ -49,26 +49,7 @@ function mostrarResultado(result) {
                     </tr>
                 </table>
             </div>
-            <div class="locations-section">
-                <h3>Ubicaciones Existentes</h3>
-                <table class="locations-table">
-                    <tr>
-                        <th>Posición</th>
-                        <th>Coordenada X</th>
-                        <th>Coordenada Y</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>1</td>
-         
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>2</td>
-                    </tr>
-
-                </table>
-            </div>
+   
 
             ${safeResult.nuevasUbicaciones.x.length > 0 ? `
                 <div class="locations-section">
