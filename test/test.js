@@ -1,3 +1,9 @@
+/*
+Integrantes:
+Alejandro Marin Hoyos - 2259353-3743
+Yessica Fernanda Villa Nuñez - 2266301-3743
+Manuel Antonio Vidales Duran - 2155481-3743
+*/
 const data1 = require('./data.js');
 const data2 = require('./data2.js');
 const data3 = require('./data3.js');
