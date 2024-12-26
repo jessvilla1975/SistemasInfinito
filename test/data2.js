@@ -12,7 +12,7 @@ module.exports = {
         ganancia_existente_esperada: 97, // Ganancia esperada para las existentes
         ganancia_total_esperada: 129 // Ganancia total esperada
     },
-    // Matriz de población simplificada 5x5
+    // Matriz de población simplificada 7x7
     poblacion: [
         [2, 3, 8, 1, 6, 5, 0],
         [9, 4, 7, 3, 2, 1, 8],
